@@ -52,7 +52,7 @@ module.exports = async (server, config) => {
           return kvStr({
             StorePath,
             URL: `nar/${hashPart}.nar`,
-            Compression: 'none', // TODO: bz2
+            Compression: 'none', // TODO: bz2 as standard
             NarHash: narHash,
             NarSize: narSize
             // References:  TODO: add
@@ -72,8 +72,10 @@ module.exports = async (server, config) => {
             throw Boom.notFound('No such path.')
           }
 
-          // TODO: pipe .dump() + .compressBz2()
+          // TODO: pipe .dump() + ?.compressBz2()
         })
+
+        return h.response(stream)
       }
     }
   })

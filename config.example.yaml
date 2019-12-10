@@ -1,0 +1,8 @@
+hapi:
+  host: '::'
+  port: 3466
+nix:
+  remote: daemon
+  store: /nix/store
+cache:
+  path: ./cache

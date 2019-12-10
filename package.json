@@ -1,0 +1,22 @@
+{
+  "name": "nix-binary-cache",
+  "template": {
+    "extends": [
+      "node"
+    ]
+  },
+  "version": "0.0.1",
+  "description": "A nix binary cache",
+  "main": "index.js",
+  "author": "Maciej Krüger <mkg20001@gmail.com>",
+  "license": "MPL-2.0",
+  "scripts": {
+    "test": "mocha -A",
+    "cov": "nyc mocha"
+  },
+  "devDependencies": {
+    "mkgs-tool": "^0.1.6",
+    "mocha": "*",
+    "nyc": "*"
+  }
+}
