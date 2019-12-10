@@ -72,7 +72,13 @@ module.exports = async (server, config) => {
             throw Boom.notFound('No such path.')
           }
 
-          // TODO: pipe .dump() + ?.compressBz2()
+          const stream = nix.dumpStoreStream(StorePath)
+
+          if (false /* compression TODO */) {
+            // TODO
+          }
+
+          return stream
         })
 
         return h.response(stream)

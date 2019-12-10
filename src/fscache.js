@@ -33,13 +33,13 @@ module.exports = (config) => {
         }
 
         if (isStream) {
-          return fs.createReadStream(pt)
+          return fso.createReadStream(pt)
         } else {
           return fs.readFile(pt)
         }
       } catch (err) {
         if (isStream) {
-          const out = fs.createWriteStream(pt, { mode: 0o200 })
+          const out = fso.createWriteStream(pt, { mode: 0o200 })
           const stream = await create()
 
           stream.on('error', (err) => {

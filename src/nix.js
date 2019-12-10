@@ -6,12 +6,14 @@ const path = require('path')
 const debug = require('debug')
 const log = debug('nix-binary-cache:nix')
 
+const cp = require('child_process')
+
 module.exports = (config) => {
   let hashCache = {}
   const lastRebuild = 0
 
   return {
-    storeDir: null,
+    storeDir: config.store,
     queryPathFromHashPart: async (part) => {
       // TODO: add resonable timeout for rebuilds
 
@@ -29,6 +31,10 @@ module.exports = (config) => {
 
       return hashCache[part]
     },
-    dumpStoreStream: (path) => {}
+    dumpStoreStream: (path) => {
+      const p = cp.spawn('nix-store', ['--dump', path], { stdio: ['pipe', 'pipe', 'inherit'] })
+
+      return p.stdout
+    }
   }
 }
