@@ -1,7 +1,9 @@
 {
   "name": "nix-binary-cache",
   "template": {
-    "extends": ["node"]
+    "extends": [
+      "node"
+    ]
   },
   "bin": {
     "nix-binary-cache": "./bin.js"
@@ -19,5 +21,6 @@
     "mkgs-tool": "^0.1.6",
     "mocha": "*",
     "nyc": "*"
-  }
+  },
+  "repository": "git@github.com:mkg20001/nix-binary-cache.git"
 }
