@@ -1,9 +1,10 @@
 {
   "name": "nix-binary-cache",
   "template": {
-    "extends": [
-      "node"
-    ]
+    "extends": ["node"]
+  },
+  "bin": {
+    "nix-binary-cache": "./bin.js"
   },
   "version": "0.0.1",
   "description": "A nix binary cache",
