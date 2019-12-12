@@ -104,7 +104,7 @@ module.exports = async (server, config) => {
         } else {
           throw Boom.notFound('No such compression.')
         }
-      })
+      }, true)
 
       return h.response(stream)
     }
