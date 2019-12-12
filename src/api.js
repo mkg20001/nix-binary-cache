@@ -1,7 +1,7 @@
 'use strict'
 
 const kvStr = (obj) => {
-  return Object.keys(obj).map(key => `${key}: ${obj[key]}`).join('\n') + '\n'
+  return Object.keys(obj).filter(key => Boolean(obj[key])).map(key => `${key}: ${obj[key]}`).join('\n') + '\n'
 }
 
 const Nix = require('./nix')
@@ -39,23 +39,23 @@ module.exports = async (server, config) => {
     handler: async (request, h) => {
       const hashPart = request.params.hashPart
 
-      const res = await cache.get(req, async () => {
+      const res = await cache.get(`${hashPart}.narinfo`, async () => {
         const StorePath = await nix.queryPathFromHashPart(hashPart)
 
         if (!StorePath) { // TODO: maybe also cache 404s?
           throw Boom.notFound('No such path.')
         }
 
-        const { narHash, narSize, time, deriver, refs } = await nix.queryPathInfo(StorePath)
+        const { narHash, narSize, deriver, refs } = await nix.queryPathInfo(StorePath)
 
         return kvStr({
           StorePath,
           URL: `nar/${hashPart}.nar`,
           Compression: 'none', // TODO: bz2 as standard
           NarHash: narHash,
-          NarSize: narSize
-          // References:  TODO: add
-          // Deriver: // TODO: add
+          NarSize: narSize,
+          References: refs.length && refs.join(', '),
+          Deriver: deriver && deriver.replace(/.*\//, '')
           // Sig: // TODO: add
         })
       })
