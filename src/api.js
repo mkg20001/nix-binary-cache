@@ -9,8 +9,8 @@ const FSCache = require('./fscache')
 const Boom = require('@hapi/boom')
 
 const NARINFO_RE = /^([0-9a-z]+)\.narinfo$/
-const NAR_BZ2_RE = /^nar\/([0-9a-z]+)\.nar\.bz2$/
-const NAR_RE = /^nar\/([0-9a-z]+)\.nar$/
+const NAR_BZ2_RE = /^([0-9a-z]+)\.nar\.bz2$/
+const NAR_RE = /^([0-9a-z]+)\.nar$/
 
 module.exports = async (server, config) => {
   const nix = Nix(config.nix)
@@ -30,7 +30,7 @@ module.exports = async (server, config) => {
 
   server.route({
     method: 'GET',
-    path: '/{nar}',
+    path: '/nar/{nar}',
     handler: async (request, h) => {
       const req = request.params.nar
 
