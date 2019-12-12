@@ -24,20 +24,20 @@ module.exports = async (server, config) => {
         StoreDir: nix.storeDir,
         WantMassQuery: 1,
         Priority: 30
-      })).headers('Content-Type', 'text/plain')
+      })).header('Content-Type', 'text/plain')
     }
   })
 
   server.route({
     method: 'GET',
-    path: '{nar}',
+    path: '/{nar}',
     handler: async (request, h) => {
       const req = request.params.nar
 
       let m
       let hashPart
 
-      if ((m = NARINFO_RE.match(req))) {
+      if ((m = req.match(NARINFO_RE))) {
         hashPart = m[1]
 
         const res = await cache.get(req, async () => {
@@ -61,8 +61,8 @@ module.exports = async (server, config) => {
           })
         })
 
-        return h.response(res).headers('Content-Type', 'text/x-nix-narinfo')
-      } else if ((m = NAR_RE.match(req))) {
+        return h.response(res).header('Content-Type', 'text/x-nix-narinfo')
+      } else if ((m = req.match(NAR_RE))) {
         hashPart = m[1]
 
         const stream = await cache.get(req, async () => {
@@ -82,6 +82,8 @@ module.exports = async (server, config) => {
         })
 
         return h.response(stream)
+      } else {
+        throw Boom.notFound('Not a valid nix path.')
       }
     }
   })
