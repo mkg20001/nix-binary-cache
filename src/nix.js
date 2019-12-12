@@ -16,17 +16,14 @@ function makeStream (cmd, args, stdin) {
   return p.stdout
 }
 
-const B32 = '0123456789abcdfghijklmnpqrsvwxyz'
-const b32 = require('base-x')(B32)
-const B16 = '0123456789abcdef'
-const b16 = require('base-x')(B16)
+const convertHash = require('./hash-32')
 
 module.exports = (config) => {
   let hashCache = {}
-  const lastRebuild = 0
+  // const lastRebuild = 0
 
+  /*
   function convertHash (algo, char, toBase32) {
-    /*
     SV * convertHash(char * algo, char * s, int toBase32)
     PPCODE:
         try {
@@ -36,13 +33,13 @@ module.exports = (config) => {
         } catch (Error & e) {
             croak("%s", e.what());
         }
-    */
 
     // sloppy
-    return b32.encode(b16.decode(char))
+    return just32(Buffer.from(char, 'hex'))
   }
+  */
 
-  async function signString (secretKey, msg) {
+  function signString (secretKey, msg) {
     /*
     SV * signString(char * secretKey_, char * msg)
     PPCODE:
@@ -114,7 +111,8 @@ module.exports = (config) => {
       }
 
       if (narHash.length === 71) {
-        narHash = 'sha256:' + convertHash('sha256', narHash.substr(7), 1)
+        // narHash = 'sha256:' + convertHash('sha256', narHash.substr(7), 1)
+        narHash = convertHash(`sha256:${Buffer.from(narHash.substr(7), 'hex').toString('base64')}`).hash
       }
 
       if (narHash.length !== 59) {
