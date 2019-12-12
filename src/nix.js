@@ -59,7 +59,7 @@ module.exports = (config) => {
 
     const key = Buffer.from(second, 'base64')
 
-    const sign64 = sodium.crypto_sign(Buffer.from(msg), key).toString('base64')
+    const sign64 = sodium.crypto_sign_detached(Buffer.from(msg), key).toString('base64')
 
     return `${first}:${sign64}`
   }
