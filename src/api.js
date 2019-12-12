@@ -66,7 +66,7 @@ module.exports = async (server, config) => {
           Compression: config.compress ? compType[config.compress] : 'none',
           NarHash: narHash,
           NarSize: narSize,
-          References: refs.length && refs.replace(/.*\//, '').join(' '),
+          References: refs.length && refs.map(r => r.replace(/.*\//, '')).join(' '),
           Deriver: deriver && deriver.replace(/.*\//, ''),
           Sig: key && await nix.signString(key, await nix.fingerprintPath(StorePath, narHash, narSize, refs))
         })
