@@ -7,6 +7,7 @@ const kvStr = (obj) => {
 const Nix = require('./nix')
 const FSCache = require('./fscache')
 const Boom = require('@hapi/boom')
+const fs = require('fs')
 
 const NARINFO_RE = /^([0-9a-z]+)\.narinfo$/
 const NAR_BZ2_RE = /^([0-9a-z]+)\.nar\.bz2$/
@@ -20,6 +21,7 @@ const compMap = {
 module.exports = async (server, config) => {
   const nix = Nix(config.nix)
   const cache = FSCache(config.cache)
+  const key = config.sign && String(fs.readFileSync(config.sign))
 
   server.route({
     method: 'GET',
@@ -51,7 +53,7 @@ module.exports = async (server, config) => {
         return kvStr({
           StorePath,
           URL: `nar/${hashPart}.nar`,
-          Compression: 'none', // TODO: bz2 as standard
+          Compression: config.compress || 'none',
           NarHash: narHash,
           NarSize: narSize,
           References: refs.length && refs.join(', '),

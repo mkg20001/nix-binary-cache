@@ -16,7 +16,9 @@ require('mkg-bin-gen')(
       }).required(),
       cache: Joi.object({
         path: Joi.string().required()
-      }).required()
+      }).required(),
+      sign: Joi.string(),
+      compress: Joi.string()
     }).required()
   },
   require('./src')
