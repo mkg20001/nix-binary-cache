@@ -11,11 +11,7 @@ const cp = require('child_process')
 const sodium = require('sodium').api
 
 function makeStream (cmd, args, stdin) {
-  const p = cp.spawn(cmd, args, { stdio: ['pipe', 'pipe', 'inherit'] })
-
-  if (stdin) {
-    stdin.pipe(p.stdin)
-  }
+  const p = cp.spawn(cmd, args, { stdio: [stdin || 'pipe', 'pipe', 'inherit'] })
 
   return p.stdout
 }
