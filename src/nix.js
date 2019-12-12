@@ -18,18 +18,39 @@ module.exports = (config) => {
   let hashCache = {}
   const lastRebuild = 0
 
-  function convertHash () {
+  function convertHash (algo, char, toBase32) {
     /*
     SV * convertHash(char * algo, char * s, int toBase32)
     PPCODE:
         try {
             Hash h(s, parseHashType(algo));
             string s = h.to_string(toBase32 ? Base32 : Base16, false);
-            XPUSHs(sv_2mortal(newSVpv(s.c_str(), 0)));
+            XPUSHs(sv_2mortal(newSVpv(s.c_str(), 0))); // this just puts things into perl
         } catch (Error & e) {
             croak("%s", e.what());
         }
     */
+
+    // TODO: add
+  }
+
+  async function signString (secretKey, msg) {
+    /*
+    SV * signString(char * secretKey_, char * msg)
+    PPCODE:
+        try {
+#if HAVE_SODIUM
+            auto sig = SecretKey(secretKey_).signDetached(msg);
+            XPUSHs(sv_2mortal(newSVpv(sig.c_str(), sig.size()))); // this just puts things into perl
+#else
+            throw Error("Nix was not compiled with libsodium, required for signed binary cache support");
+#endif
+        } catch (Error & e) {
+            croak("%s", e.what());
+        }
+    */
+
+    // TODO: add
   }
 
   return {
