@@ -8,6 +8,8 @@ const log = debug('nix-binary-cache:nix')
 
 const cp = require('child_process')
 
+const sodium = require('sodium').api
+
 function makeStream (cmd, args, stdin) {
   const p = cp.spawn(cmd, args, { stdio: [stdin || 'pipe', 'pipe', 'inherit'] })
 
@@ -51,6 +53,14 @@ module.exports = (config) => {
     */
 
     // TODO: add
+
+    const [first, second] = secretKey.split(':')
+
+    const key = Buffer.from(second, 'base64')
+
+    const sign64 = sodium.crypto_sign(Buffer.from(msg), key).toString('base64')
+
+    return `${first}:${sign64}`
   }
 
   return {
@@ -85,7 +95,7 @@ module.exports = (config) => {
 
       return {
         narHash: run('hash')[0],
-        size: parseInt(run('size')[0], 10),
+        narSize: parseInt(run('size')[0], 10),
         deriver: run('deriver')[0],
         refs: run('references')
       }
@@ -133,6 +143,7 @@ module.exports = (config) => {
           return "1;" . $storePath . ";" . $narHash . ";" . $narSize . ";" . join(",", @{$references});
       }
       */
-    }
+    },
+    signString
   }
 }

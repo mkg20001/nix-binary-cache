@@ -18,6 +18,11 @@ const compMap = {
   bz2: 'pbzip2'
 }
 
+const compEnd = {
+  lzma: 'xz',
+  bzip2: 'bz2'
+}
+
 module.exports = async (server, config) => {
   const nix = Nix(config.nix)
   const cache = FSCache(config.cache)
@@ -52,13 +57,13 @@ module.exports = async (server, config) => {
 
         return kvStr({
           StorePath,
-          URL: `nar/${hashPart}.nar`,
+          URL: `nar/${hashPart}.nar${config.compress ? '.' + compEnd[config.compress] : ''}`,
           Compression: config.compress || 'none',
           NarHash: narHash,
           NarSize: narSize,
           References: refs.length && refs.join(', '),
-          Deriver: deriver && deriver.replace(/.*\//, '')
-          // Sig: // TODO: add
+          Deriver: deriver && deriver.replace(/.*\//, ''),
+          Sig: key && await nix.signString(key, await nix.fingerprintPath(StorePath, narHash, narSize, refs))
         })
       })
 
