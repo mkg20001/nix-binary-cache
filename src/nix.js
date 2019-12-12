@@ -112,7 +112,7 @@ module.exports = (config) => {
 
       if (narHash.length === 71) {
         // narHash = 'sha256:' + convertHash('sha256', narHash.substr(7), 1)
-        narHash = convertHash(`sha256:${Buffer.from(narHash.substr(7), 'hex').toString('base64')}`).hash
+        narHash = 'sha256:' + convertHash(`sha256-${Buffer.from(narHash.substr(7), 'hex').toString('base64')}`).hash
       }
 
       if (narHash.length !== 59) {
