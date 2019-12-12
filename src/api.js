@@ -58,8 +58,7 @@ module.exports = async (server, config) => {
           throw Boom.notFound('No such path.')
         }
 
-        let { narHash, narSize, deriver, refs } = await nix.queryPathInfo(StorePath)
-        refs = refs.map(r => r.replace(/.*\//, ''))
+        const { narHash, narSize, deriver, refs } = await nix.queryPathInfo(StorePath)
 
         return kvStr({
           StorePath,
@@ -67,7 +66,7 @@ module.exports = async (server, config) => {
           Compression: config.compress ? compType[config.compress] : 'none',
           NarHash: narHash,
           NarSize: narSize,
-          References: refs.length && refs.join(' '),
+          References: refs.length && refs.replace(/.*\//, '').join(' '),
           Deriver: deriver && deriver.replace(/.*\//, ''),
           Sig: key && await nix.signString(key, await nix.fingerprintPath(StorePath, narHash, narSize, refs))
         })
