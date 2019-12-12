@@ -81,7 +81,7 @@ module.exports = (config) => {
       }
     },
     queryPathInfo: (path) => {
-      const run = (flag) => cp.execSync(`nix-store --query ${path} --${flag}`).split('\n').map(l => l.trim()).filter(Boolean)
+      const run = (flag) => cp.execSync(`nix-store --query ${path} --${flag}`).toString().split('\n').map(l => l.trim()).filter(Boolean)
 
       return {
         narHash: run('hash')[0],
