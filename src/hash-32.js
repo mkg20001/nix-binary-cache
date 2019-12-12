@@ -21,30 +21,6 @@ const base64js = require('base64-js')
 
 const BASE32 = '0123456789abcdfghijklmnpqrsvwxyz'
 
-/* export interface Sha1Hash {
-    hashType: "sha1";
-    sha1: string;
-}
-
-export interface Sha256Hash {
-    hashType: "sha256";
-    sha256: string;
-}
-
-export interface Sha512Hash {
-    hashType: "sha512";
-    sha512: string;
-}
-
-export type Hash = Sha1Hash | Sha256Hash | Sha512Hash;
-
-export type OutputHashType = "sha1" | "sha256" | "sha512";
-
-export interface OutputHash {
-    algo: OutputHashType;
-    hash: string;
-} */
-
 function base32Len (hashSize) {
   return Math.floor((hashSize * 8 - 1) / 5) + 1
 }
