@@ -86,7 +86,7 @@ module.exports = (config) => {
     dumpStoreStream: (path, compTool) => {
       const nar = makeStream('nix-store', ['--dump', path])
       if (compTool) {
-        return makeStream(compTool, ['-c'], nar)
+        return makeStream(compTool[0], compTool[1], nar)
       } else {
         return nar
       }

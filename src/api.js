@@ -14,8 +14,8 @@ const NAR_BZ2_RE = /^([0-9a-z]+)\.nar\.bz2$/
 const NAR_RE = /^([0-9a-z]+)\.nar(\.([a-z0-9]+))?$/
 
 const compMap = {
-  xz: 'lzma',
-  bz2: 'pbzip2'
+  xz: ['lzma', ['-z', '-c']],
+  bz2: ['pbzip2', ['-c']]
 }
 
 const compEnd = {
