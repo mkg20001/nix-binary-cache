@@ -16,6 +16,11 @@ function makeStream (cmd, args, stdin) {
   return p.stdout
 }
 
+const B32 = '0123456789abcdfghijklmnpqrsvwxyz'
+const b32 = require('base-x')(B32)
+const B16 = '0123456789abcdef'
+const b16 = require('base-x')(B16)
+
 module.exports = (config) => {
   let hashCache = {}
   const lastRebuild = 0
@@ -33,7 +38,8 @@ module.exports = (config) => {
         }
     */
 
-    // TODO: add
+    // sloppy
+    return b32.encode(b16.decode(char))
   }
 
   async function signString (secretKey, msg) {
@@ -51,8 +57,6 @@ module.exports = (config) => {
             croak("%s", e.what());
         }
     */
-
-    // TODO: add
 
     const [first, second] = secretKey.split(':')
 
