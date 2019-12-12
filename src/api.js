@@ -35,7 +35,7 @@ module.exports = async (server, config) => {
 
   server.route({
     method: 'GET',
-    path: '/{hashPart}.nar',
+    path: '/{hashPart}.narinfo',
     handler: async (request, h) => {
       const hashPart = request.params.hashPart
 
