@@ -23,6 +23,11 @@ const compEnd = {
   bzip2: 'bz2'
 }
 
+const compType = {
+  lzma: 'xz',
+  bzip2: 'bzip2'
+}
+
 module.exports = async (server, config) => {
   const nix = Nix(config.nix)
   const cache = FSCache(config.cache)
@@ -58,7 +63,7 @@ module.exports = async (server, config) => {
         return kvStr({
           StorePath,
           URL: `nar/${hashPart}.nar${config.compress ? '.' + compEnd[config.compress] : ''}`,
-          Compression: config.compress || 'none',
+          Compression: config.compress ? compType[config.compress] : 'none',
           NarHash: narHash,
           NarSize: narSize,
           References: refs.length && refs.join(', '),
